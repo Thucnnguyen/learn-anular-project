@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { type User } from './user.model';
 
-import { DUMMY_USERS } from '../dummy-users';
+
 @Component({
   selector: 'app-user',
   standalone: true,
@@ -9,17 +10,18 @@ import { DUMMY_USERS } from '../dummy-users';
   styleUrl: './user.component.css'
 })
 export class UserComponent {
-  selectedUsers = DUMMY_USERS[0];
+  @Input({ required: true }) user!:User;
+  @Output() userClicked = new EventEmitter<string>();
   
+  imagePath!: string;
   //set getpath for image path
-  get imagePath() {
-    return `assets/users/${this.selectedUsers.avatar}`;
+  ngOnInit() {
+    this.imagePath = `assets/users/${this.user.avatar}`;
   }
 
   //On clink user button
-  onClickUser(){
-    console.log("User clicked!");
+  onClickUser() {
+    //return user ID to get tasks
+    this.userClicked.emit(this.user.id);
   }
-  
 }
- 
